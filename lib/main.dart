@@ -18,6 +18,8 @@ class _HomeState extends State<Home> {
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   void _resetFields() {
     weightController.text = "";
     heightController.text = "";
@@ -67,77 +69,92 @@ class _HomeState extends State<Home> {
         ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Icon(
-                Icons.person_outline,
-                size: 120,
-                color: Colors.green,
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      labelText: "Peso (KG)",
-                      labelStyle: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Nunito, sans-serif')),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
-                  controller: weightController,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                Icon(
+                  Icons.person_outline,
+                  size: 120,
+                  color: Colors.green,
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      labelText: "Altura (cm)",
-                      labelStyle: TextStyle(
-                          color: Colors.green, fontWeight: FontWeight.bold)),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                  ),
-                  controller: heightController,
-                ),
-              ),
-              Padding(
+                Padding(
                   padding: EdgeInsets.all(10.0),
-                  child: Container(
-                    height: 50.0,
-                    child: RaisedButton(
-                      onPressed: () {
-                        calculateImc();
-                      },
-                      child: Text(
-                        "Calcular",
-                        style: TextStyle(color: Colors.white, fontSize: 25.0),
-                      ),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: "Peso (KG)",
+                        labelStyle: TextStyle(
+                            color: Colors.green,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Nunito, sans-serif')),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
                       color: Colors.green,
-                    ),
-                  )),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text(
-                  _infoText,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green),
+                      fontSize: 20.0,
+                    ),
+                    controller: weightController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Insira seu peso";
+                      }
+                    },
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        labelText: "Altura (cm)",
+                        labelStyle: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold)),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20.0,
+                    ),
+                    controller: heightController,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Insira sua altura";
+                      }
+                    },
+                  ),
+                ),
+                Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Container(
+                      height: 50.0,
+                      child: RaisedButton(
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            calculateImc();
+                          }
+                        },
+                        child: Text(
+                          "Calcular",
+                          style: TextStyle(color: Colors.white, fontSize: 25.0),
+                        ),
+                        color: Colors.green,
+                      ),
+                    )),
+                Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    _infoText,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green),
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }
