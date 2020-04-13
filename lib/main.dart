@@ -26,6 +26,7 @@ class _HomeState extends State<Home> {
 
     setState(() {
       _infoText = "";
+      _formKey = GlobalKey<FormState>();
     });
   }
 
